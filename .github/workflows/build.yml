@@ -30,10 +30,15 @@ jobs:
       - name: Install Python deps
         run: pip install Pillow
 
-      - name: Patch name and icon
+      - name: Patch name, icon and features
         env:
           APP_NAME: ${{ github.event.client_payload.app_name || 'ZapretGram' }}
           ICON_B64: ${{ github.event.client_payload.icon_b64 }}
+          PROXY_ENABLED: ${{ github.event.client_payload.proxy_enabled }}
+          DISABLE_PROXY_ON_VPN: ${{ github.event.client_payload.disable_proxy_on_vpn }}
+          HIDE_PHONE: ${{ github.event.client_payload.hide_phone }}
+          DISABLE_ADS: ${{ github.event.client_payload.disable_ads }}
+          GHOST_MODE: ${{ github.event.client_payload.ghost_mode }}
         run: python scripts/patch.py
 
       - name: Restore keystore
