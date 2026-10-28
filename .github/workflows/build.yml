@@ -60,19 +60,20 @@ jobs:
           echo "RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
           echo "RELEASE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
 
-      - name: List available Gradle tasks (debug)
-        run: |
-          chmod +x gradlew
-          ./gradlew :TMessagesProj:tasks --all | grep -i assemble || true
-
       - name: Build APK
         run: |
           chmod +x gradlew
           ./gradlew :TMessagesProj:assembleRelease --no-daemon -x lint --stacktrace
 
+      - name: Find produced APKs (debug)
+        run: |
+          echo "=== Все APK в проекте ==="
+          find . -name "*.apk" -type f | head -50
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ZapretGram-APK
-          path: TMessagesProj/build/outputs/apk/release/*.apk
+          path: '**/build/outputs/apk/**/*.apk'
+          if-no-files-found: error
           retention-days: 30
