@@ -60,10 +60,15 @@ jobs:
           echo "RELEASE_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
           echo "RELEASE_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
 
+      - name: List available Gradle tasks (debug)
+        run: |
+          chmod +x gradlew
+          ./gradlew :TMessagesProj:tasks --all | grep -i assemble || true
+
       - name: Build APK
         run: |
           chmod +x gradlew
-          ./gradlew :TMessagesProj:assembleTMessageRelease --no-daemon -x lint --stacktrace
+          ./gradlew :TMessagesProj:assembleRelease --no-daemon -x lint --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
