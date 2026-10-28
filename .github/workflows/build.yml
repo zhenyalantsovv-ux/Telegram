@@ -68,7 +68,9 @@ jobs:
       - name: Find produced APKs (debug)
         run: |
           echo "=== Все APK в проекте ==="
-          find . -name "*.apk" -type f | head -50
+          find . -name "*.apk" -type f 2>/dev/null || echo "APK не найдены"
+          echo "=== Содержимое build/outputs ==="
+          find TMessagesProj/build/outputs -type f 2>/dev/null | head -50 || echo "Папка build/outputs пуста или не существует"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
